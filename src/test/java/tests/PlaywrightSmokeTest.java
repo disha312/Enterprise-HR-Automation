@@ -11,7 +11,6 @@ public class PlaywrightSmokeTest {
 
             Browser browser = playwright.chromium().launch(
                     new BrowserType.LaunchOptions().setHeadless(false)
-                            .setSlowMo(500)
             );
 
             Page page = browser.newPage();
@@ -19,13 +18,13 @@ public class PlaywrightSmokeTest {
             // Open OrangeHRM
             page.navigate("https://opensource-demo.orangehrmlive.com/");
 
-            // Username
+            // Enter username
             page.getByPlaceholder("Username").fill("Admin");
 
-            // Password
+            // Enter password
             page.getByPlaceholder("Password").fill("admin123");
 
-            // Login button
+            // Click Login
             page.getByRole(
                     AriaRole.BUTTON,
                     new Page.GetByRoleOptions().setName("Login")
@@ -36,14 +35,8 @@ public class PlaywrightSmokeTest {
 
             System.out.println("Current URL: " + currentUrl);
 
-            if (currentUrl.contains("/dashboard/index")) {
-                System.out.println("Login successful - Dashboard loaded.");
-            } else {
-                System.out.println("Login failed.");
-            }
-
-            System.out.println("Login button clicked.");
-            System.out.println("Page title: " + page.title());
+            assert currentUrl.contains("/dashboard/index")
+                    : "Login failed - Dashboard was not loaded";
 
             browser.close();
         }

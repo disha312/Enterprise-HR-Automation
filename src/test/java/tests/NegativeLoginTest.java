@@ -25,15 +25,18 @@ public class NegativeLoginTest {
                     AriaRole.BUTTON,
                     new Page.GetByRoleOptions().setName("Login")
             ).click();
+
+
             Locator errorMessage = page.getByText("Invalid credentials");
 
             errorMessage.waitFor();
 
-            System.out.println(
-                    "Invalid credentials visible: "
-                            + errorMessage.isVisible()
-            );
+            assert errorMessage.isVisible()
+                    : "Expected 'Invalid credentials' message was not displayed";
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+            System.out.println("Scenario 1 passed");
+
 
             //Scenario 2
             page.getByPlaceholder("Username").fill("Admin");
@@ -45,12 +48,14 @@ public class NegativeLoginTest {
             ).click();
 
             Locator errorMessage2 = page.getByText("Invalid credentials");
-            errorMessage2.waitFor();
+            errorMessage.waitFor();
 
-            System.out.println(
-                    "Invalid password - Invalid credentials visible: "
-                            + errorMessage2.isVisible()
-            );
+            assert errorMessage2.isVisible()
+                    : "Expected 'Invalid credentials' message was not displayed";
+
+
+            System.out.println("Scenario 2 passed");
+
 
             //Scenario 3
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
@@ -69,10 +74,11 @@ public class NegativeLoginTest {
 
             usernameRequired.waitFor();
 
-            System.out.println(
-                    "Empty username - Required visible: "
-                            + usernameRequired.isVisible()
-            );
+            assert usernameRequired.isVisible()
+                    : "Expected Username 'Required' message was not displayed";
+
+            System.out.println("Scenario 3 passed");
+
 
             //Scenario 4
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
@@ -91,10 +97,11 @@ public class NegativeLoginTest {
 
             passwordRequired.waitFor();
 
-            System.out.println(
-                    "Empty password - Required visible: "
-                            + passwordRequired.isVisible()
-            );
+            assert passwordRequired.isVisible()
+                    : "Expected Password 'Required' message was not displayed";
+
+            System.out.println("Scenario 4 passed");
+
 
             browser.close();
         }
