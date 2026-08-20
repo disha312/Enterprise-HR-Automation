@@ -16,23 +16,52 @@ public class POMLoginTest {
 
             Page page = browser.newPage();
 
-            page.navigate(
-                    "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
-            );
+            try {
+                page.navigate(
+                        "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+                );
 
-            LoginPage loginPage = new LoginPage(page);
-            DashboardPage dashboardPage = new DashboardPage(page);
+                LoginPage loginPage = new LoginPage(page);
+                DashboardPage dashboardPage = new DashboardPage(page);
 
-            loginPage.enterUsername("Admin");
-            loginPage.enterPassword("admin123");
-            loginPage.clickLogin();
+                loginPage.enterUsername("Admin");
+                loginPage.enterPassword("admin123");
+                loginPage.clickLogin();
 
-            assert dashboardPage.isDashboardDisplayed()
-                    : "Dashboard was not displayed after login";
+                page.waitForURL("**/dashboard/index");
 
-            System.out.println("POM Login test passed - Dashboard displayed.");
+                page.screenshot(
+                        new Page.ScreenshotOptions()
+                                .setPath(java.nio.file.Paths.get(
+                                        "screenshots",
+                                        "login-success.png"
+                                ))
+                                .setFullPage(true)
+                );
 
-            // We'll add the login flow next.
+                if (!dashboardPage.isDashboardDisplayed()) {
+                    throw new RuntimeException(
+                            "Dashboard was not displayed after login"
+                    );
+                }
+
+                System.out.println(
+                        "POM Login test passed - Dashboard displayed."
+                );
+
+            } catch (RuntimeException e) {
+
+                page.screenshot(
+                        new Page.ScreenshotOptions()
+                                .setPath(java.nio.file.Paths.get(
+                                        "screenshots",
+                                        "login-failure.png"
+                                ))
+                                .setFullPage(true)
+                );
+
+                throw e;
+            }
 
             browser.close();
         }

@@ -31,8 +31,9 @@ public class NegativeLoginTest {
 
             errorMessage.waitFor();
 
-            assert errorMessage.isVisible()
+            assert errorMessage.textContent().equals("Invalid credentials")
                     : "Expected 'Invalid credentials' message was not displayed";
+
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 
             System.out.println("Scenario 1 passed");
@@ -50,11 +51,11 @@ public class NegativeLoginTest {
             Locator errorMessage2 = page.getByText("Invalid credentials");
             errorMessage.waitFor();
 
-            assert errorMessage2.isVisible()
+            assert errorMessage2.textContent().equals("Invalid credentials")
                     : "Expected 'Invalid credentials' message was not displayed";
 
-
             System.out.println("Scenario 2 passed");
+
 
 
             //Scenario 3
