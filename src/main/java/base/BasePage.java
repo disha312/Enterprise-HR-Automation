@@ -1,7 +1,8 @@
-package pages;
+package base;
 
-import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+
 import java.nio.file.Paths;
 
 public class BasePage {
