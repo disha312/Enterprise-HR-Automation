@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
 
 public class POMLoginTest {
 
-    @DataProvider(name = "loginData")
+    @DataProvider(name = "loginData" , parallel = true)
     public Object[][] loginData() {
         return new Object[][]{
                 {"Admin", "admin123", "success"},
@@ -21,6 +21,11 @@ public class POMLoginTest {
     @Test( dataProvider = "loginData",
             groups = {"smoke", "regression", "login"})
        public void loginTest(String username, String password, String expectedResult) {
+
+        System.out.println(
+                "Running: " + username + " | Thread: " +
+                        Thread.currentThread().getName()
+        );
 
         try (Playwright playwright = Playwright.create()) {
 

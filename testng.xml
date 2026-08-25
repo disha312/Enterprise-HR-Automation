@@ -2,7 +2,7 @@
 
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="OrangeHRM Test Suite">
+<suite name="OrangeHRM Test Suite" parallel="methods" thread-count="3">
 
     <test name="Selected Login Tests">
 

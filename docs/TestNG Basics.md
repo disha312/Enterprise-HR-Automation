@@ -102,3 +102,17 @@ Key Learning
 TestNG is now configured in the project using Maven.
 
 TestNG version: 7.12.0
+
+
+---
+
+# Day 20 — Parallel Testing
+
+Parallel testing allows multiple test cases to execute at the same time instead of running one after another.
+
+## Parallel DataProvider
+
+TestNG DataProvider can run test data in parallel by using:
+
+```java
+@DataProvider(name = "loginData", parallel = true)
