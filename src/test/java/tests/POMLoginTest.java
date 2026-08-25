@@ -1,12 +1,26 @@
 package tests;
 
 import com.microsoft.playwright.*;
+import org.testng.annotations.Test;
 import pages.DashboardPage;
 import pages.LoginPage;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 
 public class POMLoginTest {
 
-    public static void main(String[] args) {
+    @DataProvider(name = "loginData")
+    public Object[][] loginData() {
+        return new Object[][]{
+                {"Admin", "admin123", "success"},
+                {"WrongUser", "admin123", "failure"},
+                {"Admin", "wrongpassword", "failure"}
+        };
+    }
+
+    @Test( dataProvider = "loginData",
+            groups = {"smoke", "regression", "login"})
+       public void loginTest(String username, String password, String expectedResult) {
 
         try (Playwright playwright = Playwright.create()) {
 
@@ -24,30 +38,43 @@ public class POMLoginTest {
                 LoginPage loginPage = new LoginPage(page);
                 DashboardPage dashboardPage = new DashboardPage(page);
 
-                loginPage.enterUsername("Admin");
-                loginPage.enterPassword("admin123");
+                loginPage.enterUsername(username);
+                loginPage.enterPassword(password);
                 loginPage.clickLogin();
 
-                page.waitForURL("**/dashboard/index");
+                if (expectedResult.equals("success")) {
 
-                page.screenshot(
-                        new Page.ScreenshotOptions()
-                                .setPath(java.nio.file.Paths.get(
-                                        "screenshots",
-                                        "login-success.png"
-                                ))
-                                .setFullPage(true)
-                );
+                    page.waitForURL("**/dashboard/index");
 
-                if (!dashboardPage.isDashboardDisplayed()) {
-                    throw new RuntimeException(
+                    page.screenshot(
+                            new Page.ScreenshotOptions()
+                                    .setPath(java.nio.file.Paths.get(
+                                            "screenshots",
+                                            "login-success.png"
+                                    ))
+                                    .setFullPage(true)
+                    );
+
+                    Assert.assertTrue(
+                            dashboardPage.isDashboardDisplayed(),
                             "Dashboard was not displayed after login"
                     );
-                }
 
-                System.out.println(
-                        "POM Login test passed - Dashboard displayed."
-                );
+                    System.out.println(
+                            "POM Login test passed - Dashboard displayed."
+                    );
+
+                } else {
+
+                    Assert.assertTrue(
+                            loginPage.isInvalidCredentialsDisplayed(),
+                            "Invalid credentials message was not displayed"
+                    );
+
+                    System.out.println(
+                            "Negative login test passed for: " + username
+                    );
+                }
 
             } catch (RuntimeException e) {
 
@@ -62,6 +89,7 @@ public class POMLoginTest {
 
                 throw e;
             }
+
 
             browser.close();
         }

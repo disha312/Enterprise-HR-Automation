@@ -11,6 +11,7 @@ public class LoginPage {
     private final Locator usernameInput;
     private final Locator passwordInput;
     private final Locator loginButton;
+    private final Locator invalidCredentialsMessage;
 
        public LoginPage(Page page) {
            this.page = page;
@@ -26,6 +27,8 @@ public class LoginPage {
                            AriaRole.BUTTON,
                            new Page.GetByRoleOptions().setName("Login")
                    );
+           invalidCredentialsMessage =
+                   page.locator("p.oxd-alert-content-text");
 
        }
     // Action
@@ -37,5 +40,18 @@ public class LoginPage {
     }
     public void clickLogin() {
         loginButton.click();
+    }
+    public boolean isInvalidCredentialsDisplayed() {
+        try {
+            invalidCredentialsMessage.waitFor(
+                    new Locator.WaitForOptions()
+                            .setState(
+                                    com.microsoft.playwright.options.WaitForSelectorState.VISIBLE
+                            )
+            );
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
    }

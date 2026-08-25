@@ -2,10 +2,13 @@ package tests;
 
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class NegativeLoginTest {
 
-    public static void main(String[] args) {
+    @Test(groups = {"regression", "login"})
+    public void negativeLoginScenarios() {
 
         try (Playwright playwright = Playwright.create()) {
 
@@ -31,9 +34,11 @@ public class NegativeLoginTest {
 
             errorMessage.waitFor();
 
-            assert errorMessage.textContent().equals("Invalid credentials")
-                    : "Expected 'Invalid credentials' message was not displayed";
-
+            Assert.assertEquals(
+                    errorMessage.textContent(),
+                    "Invalid credentials",
+                    "Expected 'Invalid credentials' message was not displayed"
+            );
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 
             System.out.println("Scenario 1 passed");
@@ -51,8 +56,12 @@ public class NegativeLoginTest {
             Locator errorMessage2 = page.getByText("Invalid credentials");
             errorMessage.waitFor();
 
-            assert errorMessage2.textContent().equals("Invalid credentials")
-                    : "Expected 'Invalid credentials' message was not displayed";
+
+            Assert.assertEquals(
+                    errorMessage2.textContent(),
+                    "Invalid credentials",
+                    "Expected 'Invalid credentials' message was not displayed"
+            );
 
             System.out.println("Scenario 2 passed");
 
@@ -75,8 +84,10 @@ public class NegativeLoginTest {
 
             usernameRequired.waitFor();
 
-            assert usernameRequired.isVisible()
-                    : "Expected Username 'Required' message was not displayed";
+            Assert.assertTrue(
+                    usernameRequired.isVisible(),
+                    "Expected Username 'Required' message was not displayed"
+            );
 
             System.out.println("Scenario 3 passed");
 
@@ -98,8 +109,10 @@ public class NegativeLoginTest {
 
             passwordRequired.waitFor();
 
-            assert passwordRequired.isVisible()
-                    : "Expected Password 'Required' message was not displayed";
+            Assert.assertTrue(
+                    passwordRequired.isVisible(),
+                    "Expected Password 'Required' message was not displayed"
+            );
 
             System.out.println("Scenario 4 passed");
 
