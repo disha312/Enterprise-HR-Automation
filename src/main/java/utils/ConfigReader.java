@@ -8,6 +8,10 @@ public class ConfigReader {
     private static final Properties properties = new Properties();
 
     static {
+        String environment = System.getProperty("env", "test");
+
+        String configFile = "config-" + environment + ".properties";
+
         try (InputStream input = ConfigReader.class
                 .getClassLoader()
                 .getResourceAsStream("config.properties")) {
@@ -17,6 +21,8 @@ public class ConfigReader {
             }
 
             properties.load(input);
+
+            System.out.println("Loaded configuration: " + configFile);
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to load config.properties", e);
