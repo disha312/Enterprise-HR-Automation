@@ -4,17 +4,27 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class NegativeLoginTest {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(NegativeLoginTest.class);
+
     @Test(groups = {"regression", "login"})
     public void negativeLoginScenarios() {
+
+        logger.info("Starting negative login test scenarios");
 
         try (Playwright playwright = Playwright.create()) {
 
             Browser browser = playwright.chromium().launch(
                     new BrowserType.LaunchOptions().setHeadless(false)
             );
+
+            logger.info("Browser launched for negative login testing");
 
             Page page = browser.newPage();
 
@@ -41,7 +51,8 @@ public class NegativeLoginTest {
             );
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 
-            System.out.println("Scenario 1 passed");
+            logger.info("Starting Scenario 1: Invalid username");
+            logger.info("Scenario 1 passed");
 
 
             //Scenario 2
@@ -63,8 +74,8 @@ public class NegativeLoginTest {
                     "Expected 'Invalid credentials' message was not displayed"
             );
 
-            System.out.println("Scenario 2 passed");
-
+            logger.info("Starting Scenario 2: Invalid password");
+            logger.info("Scenario 2 passed");
 
 
             //Scenario 3
@@ -89,8 +100,8 @@ public class NegativeLoginTest {
                     "Expected Username 'Required' message was not displayed"
             );
 
-            System.out.println("Scenario 3 passed");
-
+            logger.info("Starting Scenario 3: Empty username");
+            logger.info("Scenario 3 passed");
 
             //Scenario 4
             page.navigate("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
@@ -114,8 +125,11 @@ public class NegativeLoginTest {
                     "Expected Password 'Required' message was not displayed"
             );
 
-            System.out.println("Scenario 4 passed");
+            logger.info("Starting Scenario 4: Empty password");
+            logger.info("Scenario 4 passed");
 
+
+            logger.info("Negative login test scenarios completed");
 
             browser.close();
         }

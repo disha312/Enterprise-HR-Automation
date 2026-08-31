@@ -2,10 +2,16 @@ package utils;
 
 import java.io.InputStream;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ConfigReader {
 
     private static final Properties properties = new Properties();
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ConfigReader.class);
 
     static {
         String environment = System.getProperty("env", "test");
@@ -14,20 +20,23 @@ public class ConfigReader {
 
         try (InputStream input = ConfigReader.class
                 .getClassLoader()
-                .getResourceAsStream("config.properties")) {
+                .getResourceAsStream(configFile)) {
 
             if (input == null) {
-                throw new RuntimeException("config.properties not found");
+                logger.error("Configuration file not found: {}", configFile);
+                throw new RuntimeException(configFile + " not found");
             }
 
             properties.load(input);
 
-            System.out.println("Loaded configuration: " + configFile);
+            logger.info("Loaded configuration: {}", configFile);
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load config.properties", e);
+            logger.error("Failed to load configuration: {}", configFile, e);
+            throw new RuntimeException("Failed to load " + configFile, e);
         }
     }
+
     public static String get(String key) {
         return properties.getProperty(key);
     }
