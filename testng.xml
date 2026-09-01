@@ -4,6 +4,10 @@
 
 <suite name="OrangeHRM Test Suite" parallel="methods" thread-count="3">
 
+    <listeners>
+        <listener class-name="listeners.ExtentReportListener"/>
+    </listeners>
+
     <test name="Selected Login Tests">
 
         <classes>
