@@ -1,12 +1,13 @@
 package pages;
 
+import base.BasePage;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
 
-public class LoginPage {
-       private final Page page;
+public class LoginPage extends BasePage {
+
 
     private final Locator usernameInput;
     private final Locator passwordInput;
@@ -14,7 +15,7 @@ public class LoginPage {
     private final Locator invalidCredentialsMessage;
 
        public LoginPage(Page page) {
-           this.page = page;
+           super(page);
 
            usernameInput =
                    page.getByPlaceholder("Username");
@@ -36,7 +37,8 @@ public class LoginPage {
         usernameInput.fill(username);
     }
     public void enterPassword(String password) {
-        passwordInput.fill(password);
+
+           passwordInput.fill(password);
     }
     public void clickLogin() {
         loginButton.click();

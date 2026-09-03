@@ -20,7 +20,7 @@ public class POMLoginTest {
 
     @Test( dataProvider = "loginData",
             groups = {"smoke", "regression", "login"})
-       public void loginTest(String username, String password, String expectedResult) {
+    public void loginTest(String username, String password, String expectedResult) {
 
         System.out.println(
                 "Running: " + username + " | Thread: " +
